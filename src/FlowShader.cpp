@@ -46,9 +46,9 @@ string FlowShader::getFlowShader(){
 
 
 	vec4 getColorCoded(float x, float y,vec2 scale) {
-		vec2 xout = vec2(max(x,0.),abs(min(x,0.)))*scale.x;
-		vec2 yout = vec2(max(y,0.),abs(min(y,0.)))*scale.y;
-		float dirY = 1;
+		vec2 xout = vec2(max(x,0.0),abs(min(x,0.0)))*scale.x;
+		vec2 yout = vec2(max(y,0.0),abs(min(y,0.0)))*scale.y;
+		float dirY = 1.0;
 		if (yout.x > yout.y)  dirY=0.90;
 		return vec4(xout.xy,max(yout.x,yout.y),dirY);
 	}
@@ -56,7 +56,7 @@ string FlowShader::getFlowShader(){
 
 	vec4 getGrayScale(vec4 col) {
 		float gray = dot(vec3(col.x, col.y, col.z), vec3(0.3, 0.59, 0.11));
-		return vec4(gray,gray,gray,1);
+		return vec4(gray,gray,gray,1.0);
 	}
 	vec4 texture2DRectGray(sampler2DRect tex, vec2 coord) {
 		return getGrayScale(texture2DRect(tex, coord));
@@ -66,8 +66,8 @@ string FlowShader::getFlowShader(){
 	{     
 		vec4 a = texture2DRectGray(tex0, texCoord);
 		vec4 b = texture2DRectGray(tex1, texCoord);
-		vec2 x1 = vec2(offset.x,0.);
-		vec2 y1 = vec2(0.,offset.y);
+		vec2 x1 = vec2(offset.x,0.0);
+		vec2 y1 = vec2(0.0,offset.y);
 
 		//get the difference
 		vec4 curdif = b-a;
@@ -105,8 +105,8 @@ string FlowShader::getReposShader(){
 
 	vec2 get2DOff(sampler2DRect tex ,vec2 coord) {
 		vec4 col = texture2DRect(tex, coord);
-		if (col.w >0.95)  col.z=col.z*-1;
-		return vec2(-1*(col.y-col.x),col.z);//,1,1);
+		if (col.w >0.95)  col.z=col.z*-1.0;
+		return vec2(-1.0*(col.y-col.x),col.z);//,1,1);
 	}
 
 	void main()  
@@ -139,23 +139,23 @@ string FlowShader::getBlurShader(){
 
 	vec4 get2DOff(sampler2DRect tex ,vec2 coord) {
 		vec4 col = texture2DRect(tex, coord);
-		if (col.w >0.95)  col.z=col.z*-1;
-		return vec4(col.y-col.x,col.z,1,1);
+		if (col.w >0.95)  col.z=col.z*-1.0;
+		return vec4(col.y-col.x,col.z,1.0,1.0);
 	}
 
 
 	vec4 getColorCoded(float x, float y,vec2 scale) {
-		vec2 xout = vec2(max(x,0.),abs(min(x,0.)))*scale.x;
-		vec2 yout = vec2(max(y,0.),abs(min(y,0.)))*scale.y;
-		float dirY = 1;
+		vec2 xout = vec2(max(x,0.0),abs(min(x,0.0)))*scale.x;
+		vec2 yout = vec2(max(y,0.0),abs(min(y,0.0)))*scale.y;
+		float dirY = 1.0;
 		if (yout.x > yout.y)  dirY=0.90;
 		return vec4(xout.yx,max(yout.x,yout.y),dirY);
 	}
 
 	void main() {  
-		float numBlurPixelsPerSide = float(blurSize / 2); 
+		float numBlurPixelsPerSide = float(blurSize / 2.0);
 
-		vec2 blurMultiplyVec = 0 < horizontalPass ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+		vec2 blurMultiplyVec = 0.0 < horizontalPass ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
 
 		// Incremental Gaussian Coefficent Calculation (See GPU Gems 3 pp. 877 - 889)
 		vec3 incrementalGaussian;
@@ -173,7 +173,7 @@ string FlowShader::getBlurShader(){
 
 		// Go through the remaining 8 vertical samples (4 on each side of the center)
 
-    	for (float i = 1.0; i <= numBlurPixelsPerSide; i++) { 
+    	for (float i = 1.0; i <= numBlurPixelsPerSide; i++) {
 			avgValue += get2DOff(texture, texCoord.st - i * texOffset * 
 				blurMultiplyVec) * incrementalGaussian.x;         
 			avgValue += get2DOff(texture, texCoord.st + i * texOffset * 
@@ -186,7 +186,7 @@ string FlowShader::getBlurShader(){
 		vec4 finColor = avgValue / coefficientSum;
 
 
-		gl_FragColor = getColorCoded(finColor.x, finColor.y,vec2(1,1));
+		gl_FragColor = getColorCoded(finColor.x, finColor.y,vec2(1.0,1.0));
 	}
 	);
 

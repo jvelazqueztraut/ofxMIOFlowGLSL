@@ -2,7 +2,9 @@
 
 #include "ofMain.h"
 
-#define STRINGIFY(A) #A
+#ifndef STRINGIFY(A)
+    #define STRINGIFY(A) #A
+#endif
 
 class FlowShader  {
 public:

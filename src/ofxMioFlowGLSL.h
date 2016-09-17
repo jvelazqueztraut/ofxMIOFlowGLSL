@@ -8,8 +8,8 @@ class ofxMioFlowGLSL  {
 public:
 	void setup(int wI,int hI);
 
-	void update(ofTexture cur);
-	void update(ofTexture cur, float lambdaI,float blurAmountI, float displaceAmountI );
+	void update(ofTexture& cur);
+	void update(ofTexture& cur, float lambdaI,float blurAmountI, float displaceAmountI );
 
 	void drawFlowGrid(int x,int y);
 	void drawFlowGridRaw(int x,int y);

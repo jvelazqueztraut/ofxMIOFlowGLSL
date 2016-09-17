@@ -42,14 +42,14 @@ void ofxMioFlowGLSL::setup(int wI,int hI) {
 	flowShader.setup();
 
 }
-void ofxMioFlowGLSL::update(ofTexture cur, float lambdaI,float blurAmountI, float displaceAmountI ) {
+void ofxMioFlowGLSL::update(ofTexture& cur, float lambdaI,float blurAmountI, float displaceAmountI ) {
 	lambda=lambdaI;
 	blurAmount=blurAmountI;
 	displaceAmount=displaceAmountI; 
 	update(cur); 
 }
 
-void ofxMioFlowGLSL::update(ofTexture cur) {
+void ofxMioFlowGLSL::update(ofTexture& cur) {
 
 	//flow Process
 		///////////////////////////////////////////////
@@ -143,9 +143,9 @@ void ofxMioFlowGLSL::drawReposition(int x,int y) {
 fboRepos.draw(x,y);
 }
 ofTexture ofxMioFlowGLSL::getFlowBlurTexture() {
-	return fboBlurV.getTextureReference();
+	return fboBlurV.getTexture();
 }
 
 ofTexture ofxMioFlowGLSL::getFlowRawTexture() {
-	return fboFlow.getTextureReference();
+	return fboFlow.getTexture();
 }
