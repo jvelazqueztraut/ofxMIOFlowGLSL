@@ -1,30 +1,27 @@
 #include "testApp.h"
 
 
-void testApp::setup(){  
-	int w,h;
-	w=640;
-	h=480;
-	cam.setup(w, h, true);
-
+void testApp::setup(){
+	video.load("test.mov");
+    video.play();
 
 	ofSetBackgroundAuto(false);
 	ofEnableAlphaBlending();
 
-	mioFlow.setup(w,h);
+	mioFlow.setup(video.getWidth(),video.getHeight());
 } 
 
 
 
 //--------------------------------------------------------------  
 void testApp::update(){  
-	cam.update();  
+	video.update();
 
-	if (cam.isFrameNew()) {
+	if (video.isFrameNew()) {
 		float valX=(float)ofGetMouseX()/(float)ofGetWidth();
 		float valY=(float)ofGetMouseY()/(float)ofGetHeight();
 
-		mioFlow.update(cam.getTexture(),valX,valY*10,0.5);
+		mioFlow.update(video.getTexture(),valX,valY*10,0.5);
 	}
 }  
 

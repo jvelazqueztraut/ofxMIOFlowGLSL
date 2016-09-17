@@ -11,6 +11,6 @@ class testApp : public ofBaseApp{
         void draw();  
 
       
-        ofVideoGrabber cam;  
+        ofVideoPlayer video;
 		ofxMioFlowGLSL mioFlow;
 }; 
