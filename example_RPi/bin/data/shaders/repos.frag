@@ -11,7 +11,7 @@ vec2 get2DOff(sampler2DRect tex ,vec2 coord) {
 
 void main()  
 {  
-	vec2 coord =  get2DOff(tex1 ,texCoordVarying)*amt+texCoord;  //relative coordinates  
+	vec2 coord =  get2DOff(tex1 ,texCoordVarying)*amt+texCoordVarying;  //relative coordinates  
 	vec4 repos = texture2DRect(tex0, coord);  
 	gl_FragColor = repos;
 } 
