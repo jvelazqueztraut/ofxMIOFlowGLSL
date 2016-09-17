@@ -1,6 +1,12 @@
-varying vec2 texCoord;  
-void main()  
-{  
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;   
-	texCoord = vec2(gl_TextureMatrix[0] * gl_MultiTexCoord0);  
+uniform mat4 modelViewProjectionMatrix;
+
+attribute vec4 position;
+attribute vec2 texcoord;
+
+varying vec2 texCoordVarying;
+
+void main()
+{
+    texCoordVarying = texcoord;
+	gl_Position = modelViewProjectionMatrix * position;
 }

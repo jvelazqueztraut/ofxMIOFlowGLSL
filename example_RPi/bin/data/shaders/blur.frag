@@ -1,6 +1,6 @@
 uniform sampler2DRect texture;
 	uniform vec2 texOffset;
-	varying vec2 texCoord;
+	varying vec2 texCoordVarying;
 
 	uniform float blurSize;       
 	uniform float horizontalPass; // 0 or 1 to indicate vertical or horizontal pass
@@ -42,16 +42,16 @@ uniform sampler2DRect texture;
 		float coefficientSum = 0.0;
 
 		// Take the central sample first...
-		avgValue += get2DOff(texture, texCoord.st) * incrementalGaussian.x;
+		avgValue += get2DOff(texture, texCoordVarying.st) * incrementalGaussian.x;
 		coefficientSum += incrementalGaussian.x;
 		incrementalGaussian.xy *= incrementalGaussian.yz;
 
 		// Go through the remaining 8 vertical samples (4 on each side of the center)
 
     	for (float i = 1.0; i <= numBlurPixelsPerSide; i++) {
-			avgValue += get2DOff(texture, texCoord.st - i * texOffset * 
+			avgValue += get2DOff(texture, texCoordVarying.st - i * texOffset * 
 				blurMultiplyVec) * incrementalGaussian.x;         
-			avgValue += get2DOff(texture, texCoord.st + i * texOffset * 
+			avgValue += get2DOff(texture, texCoordVarying.st + i * texOffset * 
 				blurMultiplyVec) * incrementalGaussian.x;         
 			coefficientSum += 2.0 * incrementalGaussian.x;
 			incrementalGaussian.xy *= incrementalGaussian.yz;
