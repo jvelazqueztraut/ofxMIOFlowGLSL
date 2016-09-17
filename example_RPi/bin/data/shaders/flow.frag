@@ -1,5 +1,5 @@
-uniform sampler2DRect tex0;  
-uniform sampler2DRect tex1;  
+uniform sampler2D tex0;  
+uniform sampler2D tex1;  
 
 
 uniform vec2 scale;  
@@ -21,7 +21,7 @@ vec4 getGrayScale(vec4 col) {
 	float gray = dot(vec3(col.x, col.y, col.z), vec3(0.3, 0.59, 0.11));
 	return vec4(gray,gray,gray,1.0);
 }
-vec4 texture2DRectGray(sampler2DRect tex, vec2 coord) {
+vec4 texture2DRectGray(sampler2D tex, vec2 coord) {
 	return getGrayScale(texture2DRect(tex, coord));
 }
 
