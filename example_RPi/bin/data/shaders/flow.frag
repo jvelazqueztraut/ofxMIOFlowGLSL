@@ -21,14 +21,14 @@ vec4 getGrayScale(vec4 col) {
 	float gray = dot(vec3(col.x, col.y, col.z), vec3(0.3, 0.59, 0.11));
 	return vec4(gray,gray,gray,1.0);
 }
-vec4 texture2DRectGray(sampler2D tex, vec2 coord) {
-	return getGrayScale(texture2DRect(tex, coord));
+vec4 texture2DGray(sampler2D tex, vec2 coord) {
+	return getGrayScale(texture2D(tex, coord));
 }
 
 void main()  
 {     
-	vec4 a = texture2DRectGray(tex0, texCoordVarying);
-	vec4 b = texture2DRectGray(tex1, texCoordVarying);
+	vec4 a = texture2DGray(tex0, texCoordVarying);
+	vec4 b = texture2DGray(tex1, texCoordVarying);
 	vec2 x1 = vec2(offset.x,0.0);
 	vec2 y1 = vec2(0.0,offset.y);
 
@@ -37,13 +37,13 @@ void main()
 
 	//calculate the gradient
 	//for X________________
-	vec4 gradx = texture2DRectGray(tex1, texCoordVarying+x1)-texture2DRectGray(tex1, texCoordVarying-x1);
-	gradx += texture2DRectGray(tex0, texCoordVarying+x1)-texture2DRectGray(tex0, texCoordVarying-x1);
+	vec4 gradx = texture2DGray(tex1, texCoordVarying+x1)-texture2DGray(tex1, texCoordVarying-x1);
+	gradx += texture2DGray(tex0, texCoordVarying+x1)-texture2DGray(tex0, texCoordVarying-x1);
 
 
 	//for Y________________
-	vec4 grady = texture2DRectGray(tex1, texCoordVarying+y1)-texture2DRectGray(tex1, texCoordVarying-y1);
-	grady += texture2DRectGray(tex0, texCoordVarying+y1)-texture2DRectGray(tex0, texCoordVarying-y1);
+	vec4 grady = texture2DGray(tex1, texCoordVarying+y1)-texture2DGray(tex1, texCoordVarying-y1);
+	grady += texture2DGray(tex0, texCoordVarying+y1)-texture2DGray(tex0, texCoordVarying-y1);
 
 	vec4 gradmag = sqrt((gradx*gradx)+(grady*grady)+vec4(lambda));
 

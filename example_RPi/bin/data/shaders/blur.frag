@@ -13,7 +13,7 @@ uniform float sigma;        // The sigma value for the gaussian function: higher
 const float pi = 3.14159265;
 
 vec4 get2DOff(sampler2D tex ,vec2 coord) {
-	vec4 col = texture2DRect(tex, coord);
+	vec4 col = texture2D(tex, coord);
 	if (col.w >0.95)  col.z=col.z*-1.0;
 	return vec4(col.y-col.x,col.z,1.0,1.0);
 }
