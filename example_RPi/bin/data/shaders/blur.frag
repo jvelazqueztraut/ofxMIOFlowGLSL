@@ -30,9 +30,7 @@ vec4 getColorCoded(float x, float y,vec2 scale) {
 	return vec4(xout.yx,max(yout.x,yout.y),dirY);
 }
 
-void main() {  
-	float numBlurPixelsPerSide = float(blurSize / 2.0);
-
+void main() {
 	vec2 blurMultiplyVec = 0.0 < horizontalPass ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
 
 	// Incremental Gaussian Coefficent Calculation (See GPU Gems 3 pp. 877 - 889)
@@ -51,7 +49,7 @@ void main() {
 
 	// Go through the remaining 8 vertical samples (4 on each side of the center)
 
-	for (float i = 1.0; i <= numBlurPixelsPerSide; i++) {
+	for (float i = 1.0; i <= 5.0 ; i++) {
 		avgValue += get2DOff(texture, texCoordVarying.st - i * texOffset * 
 			blurMultiplyVec) * incrementalGaussian.x;         
 		avgValue += get2DOff(texture, texCoordVarying.st + i * texOffset * 
