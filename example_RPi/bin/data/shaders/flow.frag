@@ -1,3 +1,6 @@
+
+precision highp float;
+
 uniform sampler2D tex0;  
 uniform sampler2D tex1;  
 
