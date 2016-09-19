@@ -58,7 +58,7 @@ void ofxMioFlowGLSL::update(ofTexture& cur) {
 		flowShader.flow.begin(); 
 
 		flowShader.flow.setUniform2f("scale", 1, 1);  
-		flowShader.flow.setUniform2f("offset", 0.0,0.0);
+		flowShader.flow.setUniform2f("offset", 1.0,1.0);
 		flowShader.flow.setUniform1f("lambda",lambda);  
 		flowShader.flow.setUniformTexture("tex0", cur, 0);  
 		flowShader.flow.setUniformTexture("tex1", lastTex, 1);        
@@ -102,7 +102,7 @@ void ofxMioFlowGLSL::update(ofTexture& cur) {
 		///////////////////////////////////////////////
 		fboRepos.begin();  
 		flowShader.repos.begin();       
-		flowShader.repos.setUniform2f("amt", 0, 0);
+		flowShader.repos.setUniform2f("amt", displaceAmount, displaceAmount);
 		flowShader.repos.setUniformTexture("tex0", cur, 0);  
 		flowShader.repos.setUniformTexture("tex1", fboBlurV, 1);  
 		
