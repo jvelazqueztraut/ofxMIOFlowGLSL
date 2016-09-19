@@ -1,7 +1,7 @@
 
 precision highp float;
 
-uniform sampler2D texture;
+uniform sampler2D tex0;
 uniform vec2 texOffset;
 varying vec2 texCoordVarying;
 
@@ -43,16 +43,16 @@ void main() {
 	float coefficientSum = 0.0;
 
 	// Take the central sample first...
-	avgValue += get2DOff(texture, texCoordVarying.st) * incrementalGaussian.x;
+	avgValue += get2DOff(tex0, texCoordVarying.st) * incrementalGaussian.x;
 	coefficientSum += incrementalGaussian.x;
 	incrementalGaussian.xy *= incrementalGaussian.yz;
 
 	// Go through the remaining 8 vertical samples (4 on each side of the center)
 
-	for (float i = 1.0; i <= 5.0 ; i++) {
-		avgValue += get2DOff(texture, texCoordVarying.st - i * texOffset * 
+	for (float i = 1.0; i <= 4.0 ; i++) {
+		avgValue += get2DOff(tex0, texCoordVarying.st - i * texOffset * 
 			blurMultiplyVec) * incrementalGaussian.x;         
-		avgValue += get2DOff(texture, texCoordVarying.st + i * texOffset * 
+		avgValue += get2DOff(tex0, texCoordVarying.st + i * texOffset * 
 			blurMultiplyVec) * incrementalGaussian.x;         
 		coefficientSum += 2.0 * incrementalGaussian.x;
 		incrementalGaussian.xy *= incrementalGaussian.yz;

@@ -21,7 +21,7 @@ void testApp::update(){
 		float valX=(float)ofGetMouseX()/(float)ofGetWidth();
 		float valY=(float)ofGetMouseY()/(float)ofGetHeight();
 
-		mioFlow.update(video.getTexture(),valX,valY*10,0.5);
+		mioFlow.update(video.getTexture(),valX,valY*10,10);
 	}
 }  
 
