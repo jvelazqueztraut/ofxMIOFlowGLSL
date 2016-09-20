@@ -4,9 +4,8 @@
 
 
 void FlowShader::setup(){
-	repos.load(ofToDataPath("shaders/repos"));
-
 	flow.load(ofToDataPath("shaders/flow"));
-
+    repos.load(ofToDataPath("shaders/repos"));
 	blur.load(ofToDataPath("shaders/blur"));
+    dilate.load(ofToDataPath("shaders/dilate"));
 }

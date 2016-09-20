@@ -4,7 +4,7 @@ varying vec2 texCoord;
 
 uniform float blurSize;       
 uniform float horizontalPass; // 0 or 1 to indicate vertical or horizontal pass
-uniform float sigma;        // The sigma value for the gaussian function: higher value means more blur
+uniform float blurSigma;        // The sigma value for the gaussian function: higher value means more blur
 // A good value for 9x9 is around 3 to 5
 // A good value for 7x7 is around 2.5 to 4
 // A good value for 5x5 is around 2 to 3.5
@@ -19,12 +19,11 @@ vec4 get2DOff(sampler2DRect tex ,vec2 coord) {
 }
 
 
-vec4 getColorCoded(float x, float y,vec2 scale) {
+vec4 getColorCoded(float x, float y, vec2 scale) {
 	vec2 xout = vec2(max(x,0.0),abs(min(x,0.0)))*scale.x;
 	vec2 yout = vec2(max(y,0.0),abs(min(y,0.0)))*scale.y;
-	float dirY = 1.0;
-	if (yout.x > yout.y)  dirY=0.90;
-	return vec4(xout.yx,max(yout.x,yout.y),dirY);
+	float mag = sqrt(x*x + y*y)*scale.x*scale.y;
+	return vec4(xout.xy,max(yout.x,yout.y),mag);
 }
 
 void main() {  
@@ -34,8 +33,8 @@ void main() {
 
 	// Incremental Gaussian Coefficent Calculation (See GPU Gems 3 pp. 877 - 889)
 	vec3 incrementalGaussian;
-	incrementalGaussian.x = 1.0 / (sqrt(2.0 * pi) * sigma);
-	incrementalGaussian.y = exp(-0.5 / (sigma * sigma));
+	incrementalGaussian.x = 1.0 / (sqrt(2.0 * pi) * blurSigma);
+	incrementalGaussian.y = exp(-0.5 / (blurSigma * blurSigma));
 	incrementalGaussian.z = incrementalGaussian.y * incrementalGaussian.y;
 
 	vec4 avgValue = vec4(0.0, 0.0, 0.0, 0.0);

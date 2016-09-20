@@ -17,6 +17,12 @@ void ofxMioFlowGLSL::setup(int wI,int hI) {
 	fboFlow.begin();  
 	ofClear(0,0,0,0);  
 	fboFlow.end();
+    
+    fboDilate.allocate(w,h,GL_RGBA);
+    fboDilate.setUseTexture(true);
+    fboDilate.begin();
+    ofClear(0,0,0,0);
+    fboDilate.end();
 
 	fboBlurH.allocate(w,h,GL_RGBA);  
 	fboBlurH.setUseTexture(true);  
@@ -36,14 +42,16 @@ void ofxMioFlowGLSL::setup(int wI,int hI) {
 	ofClear(0,0,0,0);  
 	fboRepos.end();
 
-	lambda=0.1;
-	blurAmount=5;
-	displaceAmount=0.5;
+	lambda=0.5;
+    dilateAmount=20;
+	blurAmount=10;
+	displaceAmount=10;
 	flowShader.setup();
 
 }
-void ofxMioFlowGLSL::update(ofTexture& cur, float lambdaI,float blurAmountI, float displaceAmountI ) {
+void ofxMioFlowGLSL::update(ofTexture& cur, float lambdaI,float dilateAmountI, float blurAmountI, float displaceAmountI) {
 	lambda=lambdaI;
+    dilateAmount=dilateAmountI;
 	blurAmount=blurAmountI;
 	displaceAmount=displaceAmountI; 
 	update(cur); 
@@ -57,7 +65,7 @@ void ofxMioFlowGLSL::update(ofTexture& cur) {
 		ofClear(0);
 		flowShader.flow.begin(); 
 
-		flowShader.flow.setUniform2f("scale", 1, 1);  
+		flowShader.flow.setUniform2f("scale", 10, 1);
 		flowShader.flow.setUniform2f("offset", 1.0,1.0);
 		flowShader.flow.setUniform1f("lambda",lambda);  
 		flowShader.flow.setUniformTexture("tex0", cur, 0);  
@@ -69,28 +77,43 @@ void ofxMioFlowGLSL::update(ofTexture& cur) {
 		fboFlow.end();  
 
 
-		//blur Process
+        //dilate Process
+        ///////////////////////////////////////////////
+        fboDilate.begin();
+        ofClear(0);
+        flowShader.dilate.begin();
+        flowShader.dilate.setUniformTexture("tex0", fboFlow, 0);
+        flowShader.dilate.setUniform1f("dilateSize", dilateAmount);
+    
+        fboFlow.draw(0,0);
+    
+        flowShader.dilate.end();
+        fboDilate.end();
+    
+        //blur Process
 		///////////////////////////////////////////////
 		fboBlurH.begin();  
-		flowShader.blur.begin();      
-		flowShader.blur.setUniformTexture("tex0", fboFlow, 0);
+        ofClear(0);
+        flowShader.blur.begin();
+		flowShader.blur.setUniformTexture("tex0", fboDilate, 0);
 		flowShader.blur.setUniform1f("blurSize", blurAmount);
-        flowShader.blur.setUniform1f("sigma", blurAmount/2.0); 
-		flowShader.blur.setUniform2f("texOffset",2.0,2.0);
+        flowShader.blur.setUniform1f("blurSigma", blurAmount/2.0);
+		flowShader.blur.setUniform2f("texOffset",1.0,1.0);
         flowShader.blur.setUniform1f("horizontalPass", 1.0);
 
-        fboFlow.draw(0,0);
+        fboDilate.draw(0,0);
 
 		flowShader.blur.end();
 		fboBlurH.end(); 
 
 
 		fboBlurV.begin();  
-		flowShader.blur.begin();      
+        ofClear(0);
+        flowShader.blur.begin();
 		flowShader.blur.setUniformTexture("tex0",fboBlurH, 0); 
 		flowShader.blur.setUniform1f("blurSize", blurAmount);
-        flowShader.blur.setUniform1f("sigma", blurAmount/2.0); 
-		flowShader.blur.setUniform2f("texOffset",2.0,2.0);
+        flowShader.blur.setUniform1f("blurSigma", blurAmount/2.0);
+		flowShader.blur.setUniform2f("texOffset",1.0,1.0);
         flowShader.blur.setUniform1f("horizontalPass", 0.0);
 
         fboBlurH.draw(0,0);
@@ -101,7 +124,8 @@ void ofxMioFlowGLSL::update(ofTexture& cur) {
 		//repos Process
 		///////////////////////////////////////////////
 		fboRepos.begin();  
-		flowShader.repos.begin();       
+        ofClear(0);
+        flowShader.repos.begin();
 		flowShader.repos.setUniform2f("amt", displaceAmount, displaceAmount);
 		flowShader.repos.setUniformTexture("tex0", cur, 0);  
 		flowShader.repos.setUniformTexture("tex1", fboBlurV, 1);  
@@ -119,6 +143,10 @@ void ofxMioFlowGLSL::update(ofTexture& cur) {
 
 void ofxMioFlowGLSL::drawFlowGridRaw(int x,int y) {
 fboFlow.draw(x,y);
+}
+
+void ofxMioFlowGLSL::drawFlowDilateGrid(int x,int y) {
+    fboDilate.draw(x,y);
 }
 
 void ofxMioFlowGLSL::drawFlowGrid(int x,int y) {

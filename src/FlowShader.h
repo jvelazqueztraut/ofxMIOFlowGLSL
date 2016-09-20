@@ -6,5 +6,5 @@ class FlowShader  {
 public:
 	void setup();
 
-	ofShader repos, flow,blur;  
+	ofShader flow,repos,blur,dilate;
 };
